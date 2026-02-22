@@ -1,73 +1,62 @@
-SplitWise Pro: Enterprise Expense Management System
-SplitWise Pro es una plataforma robusta diseñada para la gestión y liquidación de gastos compartidos en grupos de usuarios. El sistema se enfoca en la integridad transaccional, la escalabilidad mediante contenedores y la automatización de flujos financieros, resolviendo problemas de balance de saldos en entornos multiusuario.
+# SplitWise Pro: Enterprise Expense Management System
 
-Demo en vivo | Documentación de API
+SplitWise Pro es una plataforma robusta diseñada para la gestión y liquidación de gastos compartidos. El sistema se enfoca en la integridad transaccional, la escalabilidad mediante contenedores y la automatización de flujos financieros, resolviendo la complejidad de balances de saldos en entornos multiusuario.
 
-Arquitectura del Sistema
-El sistema implementa una arquitectura desacoplada diseñada para facilitar el mantenimiento y el despliegue continuo:
+---
 
-Frontend: Desarrollado en React.js con gestión de estado centralizada.
+## 1. Arquitectura del Sistema
 
-Backend: API REST construida bajo principios de arquitectura limpia (Clean Architecture).
+El sistema implementa una arquitectura desacoplada diseñada para facilitar el mantenimiento y el despliegue continuo (CI/CD).
 
-Base de Datos: PostgreSQL para garantizar el cumplimiento de propiedades ACID en todas las transacciones financieras.
+* **API Gateway:** Punto de entrada único que gestiona el ruteo hacia los servicios.
+* **Business Logic (Backend):** Implementado con Java (Spring Boot) siguiendo principios de Clean Architecture.
+* **Data Persistence:** PostgreSQL para garantizar el cumplimiento de propiedades ACID en transacciones financieras.
+* **Infrastructure:** Orquestación de servicios mediante Docker y Docker Compose para asegurar paridad entre entornos.
 
-Cache: Implementación de Redis para la optimización de consultas de tipos de cambio y sesiones de usuario.
+---
 
-Infraestructura: Orquestación de servicios mediante Docker y Docker Compose para entornos de desarrollo y producción.
+## 2. Modelo de Datos (Esquema Relacional)
 
-Especificaciones Funcionales
-Motor de Liquidación de Deudas
+Para asegurar la integridad de los saldos, se ha diseñado el siguiente esquema en PostgreSQL:
 
-Implementación de algoritmos de optimización de grafos para minimizar el flujo de transferencias entre miembros del grupo.
+* **Users:** Identidad y credenciales (id, username, email, password_hash).
+* **Groups:** Entidades que agrupan usuarios (id, name, description, created_at).
+* **Memberships:** Tabla relacional N:M entre Users y Groups con roles (user_id, group_id, role).
+* **Expenses:** Registro de cada gasto (id, group_id, payer_id, amount, currency, description, date).
+* **Debts:** Tabla de cálculo de saldos (id, debtor_id, creditor_id, amount, status).
 
-Soporte para múltiples criterios de división: equitativo, porcentual y por montos específicos.
+---
 
-Integración de Servicios Externos
+## 3. Especificaciones Funcionales
 
-Sincronización con APIs bancarias o de divisas para la conversión automática de moneda en tiempo real.
+### Motor de Liquidación de Deudas
+* Implementación de algoritmos de optimización para minimizar el flujo de transferencias entre miembros del grupo.
+* Soporte para múltiples criterios de división: equitativo, porcentual y por montos específicos.
 
-Motor de notificaciones asíncronas para el recordatorio de saldos pendientes y confirmación de pagos.
+### Integración de Servicios y Seguridad
+* Sincronización con APIs de divisas para la conversión automática de moneda en tiempo real.
+* Autenticación basada en estándares JWT (JSON Web Tokens) y Control de Acceso Basado en Roles (RBAC).
+* Registro de auditoría (Audit Log) para el seguimiento de modificaciones en registros de gastos.
 
-Seguridad y Auditoría
+---
 
-Autenticación basada en estándares JWT (JSON Web Tokens).
+## 4. Stack Tecnológico
 
-Sistema de Control de Acceso Basado en Roles (RBAC).
+| Capa | Tecnología Seleccionada |
+| :--- | :--- |
+| Backend | Java (Spring Boot) |
+| Base de Datos | PostgreSQL |
+| Cache / Queue | Redis (para tipos de cambio y sesiones) |
+| DevOps | Docker, Docker Compose, GitHub Actions |
+| Documentación | OpenAPI / Swagger |
 
-Registro de auditoría inmutable para el seguimiento de modificaciones en registros de gastos.
+---
 
-Stack Tecnológico
-Capa	Tecnología Seleccionada
-Backend	Spring Boot (Java) / Node.js
-Frontend	React.js / TypeScript
-Base de Datos	PostgreSQL
-DevOps	Docker, GitHub Actions (CI/CD)
-Monitoreo	Prometheus / Grafana
-Guía de Despliegue Local
+## 5. Guía de Despliegue Local
+
 El proyecto está configurado para ser ejecutado en cualquier entorno con Docker instalado:
 
-Clonación del repositorio:
-
-Bash
-git clone https://github.com/tu-usuario/splitwise-pro.git
-cd splitwise-pro
-Configuración de entorno:
-Definir las variables necesarias en el archivo .env.example y renombrarlo a .env.
-
-Ejecución de servicios:
-
-Bash
-docker-compose up -d
-Roadmap de Desarrollo
-Fase 1: Persistencia de datos y motor básico de balance.
-
-Fase 2: Implementación de microservicio de notificaciones y reportes PDF.
-
-Fase 3: Integración con pasarelas de pago (Stripe Connect).
-
-Fase 4: Optimización de infraestructura para despliegue en Kubernetes.
-
-Autores
-Cruz Hernandez Tristan Javier
-Lopez Garcia Said Eduardo
+1. **Clonación del repositorio:**
+   ```bash
+   git clone [https://github.com/tu-usuario/splitwise-pro.git](https://github.com/tu-usuario/splitwise-pro.git)
+   cd splitwise-pro
