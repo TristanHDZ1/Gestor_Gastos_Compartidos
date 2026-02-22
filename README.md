@@ -1,1 +1,1 @@
-# Gestor-_de-_gastos_compartidos
+# Gestor_de_gastos_compartidos
